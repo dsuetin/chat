@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { privatRoutes, publicRoutes } from '../routes';
 import { LOGIN_ROUTE, CHAT_ROUTE } from '../utils/consts';
 const AppRouter = () => {
-    const user = true;
+    const user = false;
     console.log("user",user, CHAT_ROUTE, LOGIN_ROUTE);
     return user ? (
         <Routes>
