@@ -1,11 +1,20 @@
 import { Box, Container, Grid, Button } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from '../index';
+import firebase from 'firebase/compat/app';
 
 const Login = () => {
-    console.log('logiiiin')
+    console.log('logiiiin');
+    const { auth } = useContext(Context);
+
+    const login = async() => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const { user } = await auth.signInWithPopup(provider);
+        console.log('useeer', user);
+    };
     return (
         <Container alignitems={'center'} justifyiontent={'center'}>
-            <Grid
+            <Grid container
               style={{heigth: window.innerHeight - 50}}
               alignitems={'center'}
               justifycontent={'center'}
@@ -18,12 +27,13 @@ const Login = () => {
                 >
                     <Box o={5}>
                         <Button
+                                onClick={login}
                                 variant='outlined'
                                 alignitems={'center'} 
                                 justifyiontent={'center'}
                                 // container justify={"flex-end"}
                             >
-                            tyyj
+                            Enter with google
                         </Button>
                     </Box>
                 </Grid>
