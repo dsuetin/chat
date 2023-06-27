@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../index';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Button, Container, Grid, TextField } from '@mui/material';
+import { Avatar, Button, Container, Grid, TextField } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Loader from './Loader';
 import firebase from "firebase/compat/app";
@@ -13,16 +13,18 @@ const Chat = () => {
     const { auth, firestore } =useContext(Context);
     const [user] = useAuthState(auth);
     const [value, setValue] = useState('');
-    const [message, loading] = useCollectionData(firestore.collection('messages').orderBy('createdAt'));
-
+    const [messages, loading] = useCollectionData(
+        firestore.collection('messages').orderBy('createdAt')
+    );
+    console.log(messages, 88888888888888888888);
     const sendMessage = async () => {
         console.log(value)
         firestore.collection('messages').add({
             uid: user.uid,
             displayName: user.displayName,
-            photoUrl: user.photoUrl,
+            photoURL: user.photoURL ,
             text: value,
-            cratedAt: firebase.firestore.FieldValue.serverTimestamp()
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         setValue('');
     }
@@ -36,7 +38,25 @@ const Chat = () => {
               style={{heigth: window.innerHeight - 50, marginTop: '20px'}}
               >
                 <div style={{width: '80%', height: '60vh', border: '1px solid gray', overflowY: 'auto'}}>
-
+                    {messages.map(message => {
+                        // console.log(877777777777777, message, message.photoURL, message.text);
+                        return (
+                            <div key={message.createdAt} style={{
+                                margin:10,
+                                border: user.uid === message.uid ? '2px solid green' : '2px dashed red',
+                                // marginLeft: user.uid === message.uid ? 'auto' : '10px',
+                                marginLeft: user.uid === message.uid ? '100px' : '10px',
+                                width: 'fit-content',
+                                padding: '5px',
+                            }}> 
+                                <Grid container>
+                                    <Avatar src={message.photoURL}/>
+                                    <div>{message.displayName}</div>
+                                </Grid>
+                                <div>{message.text}</div>
+                            </div>
+                        )
+                    })}
                 </div>
                 <Grid
                         container
